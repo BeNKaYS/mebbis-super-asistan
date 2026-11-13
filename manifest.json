@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "MEBBİS Süper Asistan (Sercan ÖZDEMİR)",
+  "version": "6.2",
+  "description": "Geliştirici: Sercan ÖZDEMİR • MEBBİS Seans Onay Otomasyonu, Manuel Öğrenci Gezgini ve A4 PDF Raporlayıcı.",
+  "author": "Sercan ÖZDEMİR",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://mebbis.meb.gov.tr/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://mebbis.meb.gov.tr/*"
+      ],
+      "js": [
+        "html2pdf.bundle.min.js",
+        "src/00-core.js",
+        "src/05-seans.js",
+        "src/10-turbo.js",
+        "src/20-gezgin.js",
+        "src/30-sure.js",
+        "src/40-rapor.js",
+        "src/45-egitmen.js",
+        "src/50-panel.js",
+        "src/90-main.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    }
+  ]
+}

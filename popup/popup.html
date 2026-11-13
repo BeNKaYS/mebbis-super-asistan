@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>MEBBİS Süper Asistan</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Üst Başlık -->
+    <div class="header">
+      <div class="logo-area">
+        <span class="logo-icon">⚡</span>
+        <div>
+          <div class="title">MEBBİS ASİSTAN</div>
+          <div class="version"><span id="surum-etiket">v—</span> • Süper Paket</div>
+        </div>
+      </div>
+      <div id="status-pill" class="pill pill-active">Aktif</div>
+    </div>
+
+    <!-- Lisans Kartı -->
+    <div class="card license-card">
+      <div class="card-title">KULLANIM LİSANSI</div>
+      <div class="license-info">
+        <div class="license-row">
+          <span class="label">Kalan Süre:</span>
+          <span id="days-remaining" class="value highlight">Hesaplanıyor...</span>
+        </div>
+        <div class="license-row">
+          <span class="label">Bitiş Tarihi:</span>
+          <span id="expires-date" class="value">23 Aralık 2026</span>
+        </div>
+        <div class="license-row">
+          <span class="label">Lisans Sahibi:</span>
+          <span id="developer-name" class="value dev-name">Sercan ÖZDEMİR</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Şeffaflık Ayarı -->
+    <div class="card settings-card">
+      <div class="card-title">PANEL GÖRÜNÜM & ŞEFFAFLIK</div>
+      <div class="setting-item">
+        <div class="setting-header">
+          <span class="setting-label">Boşta Şeffaflık (Fare Dışındayken):</span>
+          <span id="transparency-val" class="setting-badge">%25</span>
+        </div>
+        <input type="range" id="transparency-slider" min="5" max="100" step="5" value="25" class="slider">
+        <div class="setting-hint">💡 Fare panel üzerine gelince otomatik %100 netleşir.</div>
+      </div>
+    </div>
+
+    <!-- Özel Onay ve Ret Açıklamaları -->
+    <div class="card templates-card">
+      <div class="card-title">ÖZEL ONAY & RET METİNLERİ</div>
+      
+      <div class="template-group">
+        <label class="template-label" for="txt-onay-metni">
+          <span style="color:#30d158;font-weight:900;">✔</span> Onay Metni (Uyumlu):
+        </label>
+        <textarea id="txt-onay-metni" rows="2" class="template-textarea" placeholder="Resmi onay açıklaması..."></textarea>
+      </div>
+
+      <div class="template-group">
+        <label class="template-label" for="txt-ret-metni">
+          <span style="color:#ff453a;font-weight:900;">✖</span> Ret Metni (Uyumsuz):
+        </label>
+        <textarea id="txt-ret-metni" rows="2" class="template-textarea" placeholder="Resmi ret açıklaması..."></textarea>
+      </div>
+
+      <div class="template-actions">
+        <button id="btn-save-templates" class="btn-save">
+          💾 Metinleri Kaydet
+        </button>
+        <button id="btn-reset-templates" class="btn-reset" title="Resmi yönetmelik metinlerine dön">
+          🔄 Sıfırla
+        </button>
+      </div>
+      <div id="templates-status" class="status-msg"></div>
+    </div>
+
+    <!-- Hızlı Kısayol Rehberi -->
+    <div class="card shortcuts-card">
+      <div class="card-title">KLAVYE KISAYOLLARI</div>
+      <div class="shortcut-list">
+        <div class="shortcut-item">
+          <kbd>Alt + A</kbd>
+          <span>Seansı Onayla (Aynı Gün Dahil)</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + R</kbd>
+          <span>Seansı Ret Et (Aynı Gün Dahil)</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + M</kbd>
+          <span>Tüm M-M Seansları Ret Et</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + S</kbd>
+          <span>Tüm Manuel Onayları Sil</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + ➔ / ⬅</kbd>
+          <span>Sonraki / Önceki Manuel Öğrenci</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + Enter</kbd>
+          <span>Seans Tablosuna Gir / Aç</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Z · Space · ← →</kbd>
+          <span>Pencerede: Büyüt · Diğer Foto · Seans</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Programı Güncelle -->
+    <div class="card update-card">
+      <div class="card-title">PROGRAMI GÜNCELLE</div>
+      <div class="license-row">
+        <span class="label">Mevcut Sürüm:</span>
+        <span id="upd-mevcut" class="value">—</span>
+      </div>
+      <div class="upd-kaynak">
+        <label><input type="radio" name="upd-kaynak" value="github" checked> GitHub</label>
+        <label><input type="radio" name="upd-kaynak" value="yerel"> Yerel klasör</label>
+      </div>
+      <input id="upd-repo" class="upd-input" type="text" placeholder="kullanici/repo veya https://github.com/kullanici/repo">
+      <div id="upd-klasor-kutu" style="display:none;">
+        <input id="upd-klasor" type="file" webkitdirectory class="upd-input">
+      </div>
+      <div class="template-actions">
+        <button id="btn-upd-kontrol" class="btn-save">🔎 Kontrol Et</button>
+        <button id="btn-upd-guncelle" class="btn-reset" disabled>⬇️ Güncelle</button>
+      </div>
+      <button id="btn-upd-yenile" class="btn-reset upd-yenile" style="display:none;">🔄 Dosyaları değiştirdim, eklentiyi yenile</button>
+      <div id="upd-sonuc" class="status-msg upd-sonuc"></div>
+    </div>
+
+    <!-- Acil Durdurma & Sıfırlama Butonu -->
+    <button id="btn-durdur" class="btn-durdur">
+      🛑 Tüm İşlemleri Durdur / Sıfırla
+    </button>
+
+    <!-- Alt Bağlantı Butonu -->
+    <button id="btn-open-mebbis" class="btn-mebbis">
+      🔗 MEBBİS'i Aç / Sayfaya Git
+    </button>
+
+    <div class="footer">
+      Özel Eğitim Kurumları Yönetmeliği Uyumlu
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

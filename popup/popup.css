@@ -1,0 +1,377 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 335px;
+  max-height: 590px;
+  overflow-y: auto;
+  background: #16161c;
+  color: #f3f4f6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+body::-webkit-scrollbar-thumb {
+  background: #2d2d3d;
+  border-radius: 4px;
+}
+
+.popup-container {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2d2d3a;
+  padding-bottom: 8px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  font-size: 20px;
+  color: #ff9f0a;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.version {
+  font-size: 10px;
+  color: #5ac8fa;
+  font-weight: 600;
+}
+
+.pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.pill-active {
+  background: rgba(48, 209, 88, 0.18);
+  color: #30d158;
+  border: 1px solid rgba(48, 209, 88, 0.35);
+}
+
+.pill-expired {
+  background: rgba(255, 69, 58, 0.18);
+  color: #ff453a;
+  border: 1px solid rgba(255, 69, 58, 0.35);
+}
+
+.card {
+  background: #202029;
+  border: 1px solid #303040;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.card-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #8e8e93;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.license-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.license-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.license-row .label {
+  color: #a1a1aa;
+}
+
+.license-row .value {
+  font-weight: 700;
+  color: #fff;
+}
+
+.license-row .highlight {
+  color: #30d158;
+}
+
+.license-row .dev-name {
+  color: #5ac8fa;
+}
+
+/* Şeffaflık Ayarı */
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-label {
+  font-size: 11px;
+  color: #d1d1d6;
+  font-weight: 600;
+}
+
+.setting-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #5ac8fa;
+  background: #1c2638;
+  border: 1px solid #2b3d5c;
+  padding: 1px 7px;
+  border-radius: 6px;
+}
+
+.slider {
+  width: 100%;
+  accent-color: #007aff;
+  cursor: pointer;
+  height: 5px;
+  border-radius: 3px;
+  background: #333344;
+}
+
+.setting-hint {
+  font-size: 10px;
+  color: #8e8e93;
+}
+
+/* Onay & Ret Metinleri */
+.template-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.template-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #d1d1d6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.template-textarea {
+  width: 100%;
+  background: #181820;
+  color: #f3f4f6;
+  border: 1px solid #3c3c4f;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-family: inherit;
+  line-height: 1.35;
+  resize: vertical;
+  min-height: 44px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.template-textarea:focus {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.25);
+}
+
+.template-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-save {
+  flex: 1;
+  background: linear-gradient(135deg, #007aff, #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+}
+
+.btn-reset {
+  background: #2a2a36;
+  color: #d1d1d6;
+  border: 1px solid #444458;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-reset:hover {
+  background: #363646;
+}
+
+.status-msg {
+  font-size: 10px;
+  margin-top: 4px;
+  font-weight: 600;
+  text-align: center;
+  min-height: 14px;
+}
+
+/* Kısayollar */
+.shortcut-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #d1d1d6;
+}
+
+kbd {
+  background: #2c2c38;
+  color: #ff9f0a;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #444458;
+  white-space: nowrap;
+}
+
+.btn-durdur {
+  width: 100%;
+  background: linear-gradient(135deg, #ff453a, #c92a2a);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 69, 58, 0.35);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-durdur:hover {
+  filter: brightness(1.1);
+}
+
+.btn-mebbis {
+  width: 100%;
+  background: linear-gradient(135deg, #007aff, #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+  transition: all 0.15s ease;
+}
+
+.btn-mebbis:hover {
+  filter: brightness(1.1);
+}
+
+.footer {
+  text-align: center;
+  font-size: 9.5px;
+  color: #71717a;
+}
+
+/* Güncelleme */
+.update-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upd-kaynak {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: #d1d1d6;
+}
+
+.upd-kaynak input {
+  accent-color: #007aff;
+  margin-right: 3px;
+}
+
+.upd-input {
+  width: 100%;
+  background: #181820;
+  color: #f3f4f6;
+  border: 1px solid #3c3c4f;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-family: inherit;
+  outline: none;
+}
+
+.upd-input:focus {
+  border-color: #007aff;
+}
+
+.btn-reset:disabled,
+.btn-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.upd-yenile {
+  width: 100%;
+}
+
+.upd-sonuc {
+  text-align: left;
+  color: #a1a1aa;
+  white-space: pre-line;
+  user-select: text;
+}
