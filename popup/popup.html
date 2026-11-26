@@ -24,7 +24,7 @@
       <div class="card-title">KULLANIM LİSANSI</div>
       <div class="license-info">
         <div class="license-row">
-          <span class="label">Kalan Süre:</span>
+          <span class="label" id="mode-label">Kalan Süre:</span>
           <span id="days-remaining" class="value highlight">Hesaplanıyor...</span>
         </div>
         <div class="license-row">
@@ -34,6 +34,16 @@
         <div class="license-row">
           <span class="label">Lisans Sahibi:</span>
           <span id="developer-name" class="value dev-name">Sercan ÖZDEMİR</span>
+        </div>
+        <div class="license-row">
+          <span class="label">Makine Kodu:</span>
+          <span class="value"><code id="machine-code" style="font-size:11px;">...</code>
+            <button id="btn-copy-machine" class="btn-reset" style="padding:2px 8px;margin-left:4px;">Kopyala</button></span>
+        </div>
+        <div class="setting-item" style="margin-top:8px;">
+          <textarea id="license-key" class="template-textarea" rows="2" placeholder="Lisans anahtarını buraya yapıştırın (MSALIC_...)"></textarea>
+          <button id="btn-activate" class="btn-save" style="margin-top:6px;">🔑 Etkinleştir</button>
+          <div id="license-msg" class="setting-hint"></div>
         </div>
       </div>
     </div>

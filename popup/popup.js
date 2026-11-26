@@ -52,24 +52,48 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------------------------------------------------------------------
   // 1. Lisans
   // ---------------------------------------------------------------------------
-  chrome.runtime.sendMessage({ type: 'CHECK_LICENSE' }, (res) => {
+  const lisansGoster = (res) => {
     if (!res) return;
-    $('developer-name').textContent = res.developer || 'Sercan ÖZDEMİR';
-    $('expires-date').textContent = res.expiresDateStr || '23.12.2026';
+    $('developer-name').textContent = res.owner || res.developer || 'Sercan ÖZDEMİR';
+    $('expires-date').textContent = res.expiresDateStr || '—';
+    $('machine-code').textContent = res.machineCode || '—';
     const gun = $('days-remaining');
     const pill = $('status-pill');
+    const etiket = { lisans: 'Lisanslı', deneme: 'Deneme', kilitli: 'Kilitli' }[res.mode] || '';
+    $('license-key').parentElement.style.display = res.mode === 'lisans' ? 'none' : '';
     if (res.valid) {
-      gun.textContent = `${res.daysRemaining} Gün Kaldı`;
+      gun.textContent = `${res.daysRemaining} Gün Kaldı (${etiket})`;
       gun.className = 'value highlight';
+      gun.style.color = '';
       pill.textContent = 'Aktif';
       pill.className = 'pill pill-active';
     } else {
       gun.textContent = 'Süre Doldu';
       gun.style.color = '#ff453a';
-      gun.title = res.reason || '';
       pill.textContent = 'Kilitli';
       pill.className = 'pill pill-expired';
     }
+    $('license-msg').textContent = res.reason || '';
+  };
+  chrome.runtime.sendMessage({ type: 'CHECK_LICENSE' }, lisansGoster);
+
+  $('btn-copy-machine').addEventListener('click', () => {
+    navigator.clipboard.writeText($('machine-code').textContent).then(() => {
+      $('license-msg').textContent = 'Makine kodu kopyalandı.';
+    });
+  });
+  $('btn-activate').addEventListener('click', () => {
+    const anahtar = $('license-key').value.trim();
+    if (!anahtar) { $('license-msg').textContent = 'Önce anahtarı yapıştırın.'; return; }
+    chrome.runtime.sendMessage({ type: 'ACTIVATE_LICENSE', key: anahtar }, (r) => {
+      if (r && r.ok) {
+        lisansGoster(r.durum);
+        $('license-msg').textContent = 'Lisans etkinleştirildi. Açık MEBBİS sekmelerini yenileyin (F5).';
+        $('license-key').value = '';
+      } else {
+        $('license-msg').textContent = (r && r.hata) || 'Etkinleştirilemedi.';
+      }
+    });
   });
 
   // ---------------------------------------------------------------------------

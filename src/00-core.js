@@ -8,7 +8,7 @@
   'use strict';
 
   const M = (window.__MSA = window.__MSA || {});
-  M.SURUM = '6.2';
+  M.SURUM = '6.3';
   M.GELISTIRICI = 'Sercan ÖZDEMİR';
 
   // ---------------------------------------------------------------------------
@@ -21,46 +21,6 @@
     Object.defineProperty(window, 'confirm', { value: herZamanEvet, writable: true, configurable: true });
     Object.defineProperty(window, 'alert', { value: herZamanEvet, writable: true, configurable: true });
   } catch (e) { /* bazı sayfalarda tanımlanamayabilir */ }
-
-  // ---------------------------------------------------------------------------
-  // Lisans
-  // ---------------------------------------------------------------------------
-  const LISANS_BITIS = 1798059599000; // 23.12.2026 23:59:59 (GMT+3)
-  const GUN_MS = 86400000;
-
-  function lisansKutusuGoster(mesaj) {
-    const ciz = () => {
-      if (!document.body || document.getElementById('msa-lic-box')) return;
-      const kutu = document.createElement('div');
-      kutu.id = 'msa-lic-box';
-      kutu.style.cssText =
-        'position:fixed;bottom:24px;right:24px;z-index:99999999;background:#18181f;color:#fff;' +
-        'border:2px solid #ff453a;border-radius:14px;padding:16px 20px;font:13px -apple-system,sans-serif;' +
-        'box-shadow:0 12px 40px rgba(0,0,0,0.7);max-width:320px;line-height:1.5;text-align:center;';
-      kutu.innerHTML = `
-        <div style="font-size:22px;margin-bottom:6px;">⚠️</div>
-        <div style="font-weight:800;color:#ff453a;font-size:14px;margin-bottom:4px;">LİSANS SÜRESİ DOLDU</div>
-        <div style="font-size:11px;color:#a1a1aa;margin-bottom:10px;">${M.esc(mesaj || 'Bu betiğin 2 aylık kullanım lisansı dolmuştur.')}</div>
-        <div style="border-top:1px solid #2d2d3a;padding-top:8px;font-size:11px;color:#8e8e93;">
-          Geliştirici / Lisans Sahibi:<br>
-          <strong style="color:#5ac8fa;font-size:12px;">${M.GELISTIRICI}</strong>
-        </div>`;
-      document.body.appendChild(kutu);
-    };
-    if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', ciz);
-    else ciz();
-  }
-
-  function lisansKontrol() {
-    const simdi = Date.now();
-    try {
-      const sonGorulen = parseInt(localStorage.getItem('msa_lic_t') || '0', 10);
-      if (sonGorulen > simdi + GUN_MS) return 'Geçersiz sistem saati tespit edildi.';
-      localStorage.setItem('msa_lic_t', String(simdi));
-    } catch (e) { /* localStorage kapalı olabilir */ }
-    if (simdi > LISANS_BITIS) return 'Kullanım süresi (2 ay) sona ermiştir.';
-    return null;
-  }
 
   // ---------------------------------------------------------------------------
   // Genel yardımcılar
@@ -292,7 +252,6 @@
   // ---------------------------------------------------------------------------
   // Lisans kapısı: süre dolduysa diğer modüller hiç çalışmaz
   // ---------------------------------------------------------------------------
-  const lisansHatasi = lisansKontrol();
-  M.kilitli = !!lisansHatasi;
-  if (M.kilitli) lisansKutusuGoster(lisansHatasi);
+  // Lisans kontrolü background.js'te; betikler yalnızca lisans geçerliyken eklenir.
+  M.kilitli = false;
 })();
