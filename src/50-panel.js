@@ -101,6 +101,10 @@
         <div class="msa-akordeon-kart" style="${KART}">
           ${akordeonBasligi('msa-baslik-gezgin', 'msa-ikon-gezgin', '#ff9f0a', '🧭', '2. Manuel Gezgin & Hızlı Onay')}
           <div id="msa-icerik-gezgin" style="padding:10px;display:none;flex-direction:column;gap:8px;">
+            <select id="msa-gezgin-mod" style="${SELECT}border:1px solid #664600;color:#ff9f0a;font-weight:700;">
+              <option value="MANUEL">🧭 Manuel Gezgin (M:)</option>
+              <option value="KGS">🟡 KGS Gezgin (K(*))</option>
+            </select>
             <div style="background:#18181f;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;border:1px solid #2d2d3a;">
               <div style="display:flex;justify-content:space-between;align-items:center;">
                 <span id="msa-sayac" style="background:#ff9f0a;color:#1c1c1e;font-size:13px;font-weight:900;padding:2px 7px;border-radius:6px;">0 / 0</span>
@@ -160,6 +164,11 @@
                 <option value="UYUMLU">✅ Sadece Onaylananlar (Uyumlu)</option>
               </select>
               <button id="msa-rapor-baslat-onay" style="width:100%;background:#d70015;color:#fff;border:none;border-radius:5px;padding:6px;font-weight:700;font-size:11px;cursor:pointer;">🔍 Onay Durumu Raporu Çıkar</button>
+            </div>
+
+            <div style="background:#2b2a1c; border:1px solid #5c5624; border-radius:8px; padding:7px;">
+              <label style="font-size:10px;font-weight:800;color:#ffd60a;display:block;margin-bottom:3px;">3. TÜR: K(*) KGS SEANSLARI (TARİH / SAAT)</label>
+              <button id="msa-rapor-baslat-kgs" style="width:100%;background:#b8860b;color:#fff;border:none;border-radius:5px;padding:6px;font-weight:700;font-size:11px;cursor:pointer;">🔍 KGS(*) Raporu Çıkar</button>
             </div>
 
             <button id="msa-rapor-sifirla" style="width:100%;background:#2c2c38;color:#a1a1aa;border:1px solid #444458;border-radius:6px;padding:5px;cursor:pointer;font-weight:600;font-size:10px;">🧹 Rapor Önbelleğini Sıfırla</button>
@@ -333,6 +342,9 @@
 
     // Gezgin
     const G = 'msa-icerik-gezgin';
+    const gezginMod = panel.querySelector('#msa-gezgin-mod');
+    gezginMod.value = M.gezginModu();
+    gezginMod.addEventListener('change', () => M.gezginModuAyarla(gezginMod.value));
     tik('msa-btn-seans', G, M.seanslaraGit);
     tik('msa-btn-onayla', G, M.onayla);
     tik('msa-btn-ret-gun', G, M.retEt);
@@ -347,6 +359,7 @@
     const onayMod = panel.querySelector('#msa-rapor-onay-mod');
     tik('msa-rapor-baslat-kontrol', null, () => M.raporBaslat('KONTROL', kontrolMod.value, onayMod.value));
     tik('msa-rapor-baslat-onay', null, () => M.raporBaslat('ONAY', kontrolMod.value, onayMod.value));
+    tik('msa-rapor-baslat-kgs', null, () => M.raporBaslat('KGS', kontrolMod.value, onayMod.value));
     tik('msa-rapor-sifirla', null, () => {
       M.raporTemizle();
       document.title = 'MEBBİS';

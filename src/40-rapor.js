@@ -60,7 +60,8 @@
   };
 
   /** Seans satırı rapor kriterine uyuyor mu? */
-  function satirUygunMu(gManuel, cManuel, d, denetim) {
+  function satirUygunMu(gManuel, cManuel, d, denetim, kgs) {
+    if (d.raporKategorisi === 'KGS') return kgs;
     const herhangi = gManuel || cManuel;
     if (!herhangi) return false;
     if ((d.raporKategorisi || 'KONTROL') === 'KONTROL') {
@@ -88,7 +89,8 @@
       const g = M.girisMetni(tr).includes('Manuel');
       const c = M.cikisMetni(tr).includes('Manuel');
       const denetim = M.denetimMetni(tr) || '-';
-      if (!satirUygunMu(g, c, d, denetim)) continue;
+      const kgs = M.kgsMi(tr);
+      if (!satirUygunMu(g, c, d, denetim, kgs)) continue;
 
       if (!adSoyad) adSoyad = `${M.hucre(tr, 2)} ${M.hucre(tr, 3)}`.trim();
       const tarih = M.hucre(tr, 5);
@@ -96,7 +98,9 @@
       if (!gunler.has(gun)) gunler.set(gun, { gun, tarih, seanslar: [] });
       gunler.get(gun).seanslar.push({
         saat: M.hucre(tr, 6),
-        tur: eslesmeTuru(g, c),
+        tur: d.raporKategorisi === 'KGS'
+          ? `${M.taraf(M.girisMetni(tr))}-${M.taraf(M.cikisMetni(tr))}`
+          : eslesmeTuru(g, c),
         denetim,
         uyumluMu: M.denetimDurumu(denetim).uyumlu,
       });
@@ -149,7 +153,8 @@
 
       const tr = satirlar[d.index];
       const manuelIsaretli = M.hucre(tr, 14).includes('M:') || M.hucre(tr, 15).includes('M:');
-      if (!manuelIsaretli) {
+      const atla = d.raporKategorisi === 'KGS' ? !M.kgsMi(tr) : !manuelIsaretli;
+      if (atla) {
         d.index += 1;
         yaz(d);
         await M.bekle(25);
@@ -380,7 +385,9 @@
     const kategori = d.raporKategorisi || 'KONTROL';
     const mmModu = kategori === 'KONTROL' && d.kontrolModu === 'MM';
     const baslik =
-      kategori === 'KONTROL'
+      kategori === 'KGS'
+        ? 'K(*) KGS SEANSLARI: TARİH VE SAAT LİSTESİ'
+        : kategori === 'KONTROL'
         ? mmModu
           ? 'DENETİM ÖNCESİ KONTROL: SADECE ÇİFT MANUEL (M-M) LİSTESİ'
           : 'DENETİM ÖNCESİ KONTROL: TÜM MANUEL (M-M, M-O, O-M) LİSTESİ'

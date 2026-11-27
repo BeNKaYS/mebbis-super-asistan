@@ -34,11 +34,36 @@
   M.seriAcik = () => localStorage.getItem('msa_seri_ilerle') !== 'false';
   M.seriAyarla = (acik) => localStorage.setItem('msa_seri_ilerle', acik ? 'true' : 'false');
 
+  /** Gezgin modu: 'MANUEL' (M:) ya da 'KGS' (K(*)). */
+  M.gezginModu = () => (localStorage.getItem('msa_gezgin_modu') === 'KGS' ? 'KGS' : 'MANUEL');
+  /** Seans satırı gezginin hedefi mi? (moda göre manuel ya da K(*)) */
+  M.hedefMi = (tr) => (M.gezginModu() === 'KGS' ? M.kgsMi(tr) : M.manuelMi(tr));
+  M.gezginModuAyarla = (mod) => {
+    localStorage.setItem('msa_gezgin_modu', mod === 'KGS' ? 'KGS' : 'MANUEL');
+    const d = M.gezginOku();
+    d.aktifIndex = 0;
+    d.bekleyenGecis = null;
+    M.gezginYaz(d);
+    if (M.seansTablosundaMi()) {
+      M.seansSatirlari().forEach((tr, i) => { if (i > 0) tr.style.backgroundColor = ''; });
+      M.manuelSatirlariBoya();
+      M.gezginPaneliGuncelle();
+    } else {
+      M.listeSayfasiHazirla();
+    }
+    M.toast(mod === 'KGS' ? '🟡 Gezgin: K(*) KGS öğrencileri' : '🧭 Gezgin: Manuel öğrenciler');
+  };
+
   // ---------------------------------------------------------------------------
   // Öğrenci listesi
   // ---------------------------------------------------------------------------
   /** Liste sütunlarındaki "M:" / "O:" işaretinden eşleşme türü. */
   function turBelirle(giris, cikis) {
+    if (M.gezginModu() === 'KGS') {
+      if (!M.KGS_RE.test(giris) && !M.KGS_RE.test(cikis)) return null;
+      const f = (x) => (M.KGS_RE.test(x) ? 'K' : x.includes('M:') ? 'M' : 'O');
+      return `${f(giris)}-${f(cikis)}`;
+    }
     const gM = giris.includes('M:'), cM = cikis.includes('M:');
     const gO = giris.includes('O:'), cO = cikis.includes('O:');
     if (gM && cM) return 'MM';
@@ -93,7 +118,7 @@
     if (d.aktifIndex >= ogrenciler.length) d.aktifIndex = Math.max(0, ogrenciler.length - 1);
 
     satirlar.forEach((tr) => {
-      if (turBelirle(M.hucre(tr, 14), M.hucre(tr, 15))) tr.style.backgroundColor = '#fff3cd';
+      tr.style.backgroundColor = turBelirle(M.hucre(tr, 14), M.hucre(tr, 15)) ? '#fff3cd' : '';
     });
 
     if (d.bekleyenGecis != null) {
@@ -190,10 +215,10 @@
     const kayit = (i) => ({ tr: satirlar[i], no: i, tarih: M.satirTarihi(satirlar[i]) });
     if (M.secili.no && satirlar[M.secili.no]) return kayit(M.secili.no);
     for (let i = 1; i < satirlar.length; i++) {
-      if (M.manuelMi(satirlar[i]) && !M.denetimDurumu(M.denetimMetni(satirlar[i])).uyumlu) return kayit(i);
+      if (M.hedefMi(satirlar[i]) && !M.denetimDurumu(M.denetimMetni(satirlar[i])).uyumlu) return kayit(i);
     }
     for (let i = 1; i < satirlar.length; i++) {
-      if (M.manuelMi(satirlar[i])) return kayit(i);
+      if (M.hedefMi(satirlar[i])) return kayit(i);
     }
     return null;
   }
@@ -228,7 +253,7 @@
     if (!satirlar.length) return;
     for (let i = 1; i < satirlar.length; i++) {
       const tr = satirlar[i];
-      if (!M.manuelMi(tr)) continue;
+      if (!M.hedefMi(tr)) continue;
       tr.setAttribute('data-manuel', 'true');
       const d = M.denetimDurumu(M.denetimMetni(tr));
       tr.style.backgroundColor = d.uyumlu ? '#e8f5e9' : d.uyumsuz ? '#ffebee' : '#fff3cd';
@@ -555,7 +580,7 @@
     const durumEl = q('#msa-seans-durum');
     if (!adet) {
       if (q('#msa-sayac')) q('#msa-sayac').textContent = '0 / 0';
-      if (q('#msa-ad')) q('#msa-ad').textContent = adOverride || 'Taranıyor veya hepsi O-O';
+      if (q('#msa-ad')) q('#msa-ad').textContent = adOverride || (M.gezginModu() === 'KGS' ? 'K(*) öğrenci yok' : 'Taranıyor veya hepsi O-O');
       if (q('#msa-tur')) q('#msa-tur').textContent = '-';
       if (durumEl) durumEl.style.display = 'none';
       return;
@@ -572,7 +597,7 @@
     if (tabloda && durumEl) {
       const satirlar = [...M.seansSatirlari()].slice(1);
       // Manuel seans yoksa tüm seanslar üzerinden sayılır
-      const hedefler = satirlar.some(M.manuelMi) ? satirlar.filter(M.manuelMi) : satirlar;
+      const hedefler = satirlar.some(M.hedefMi) ? satirlar.filter(M.hedefMi) : satirlar;
       let uyumlu = 0, uyumsuz = 0, bekleyen = 0;
       hedefler.forEach((tr) => {
         const dd = M.denetimDurumu(M.denetimMetni(tr));

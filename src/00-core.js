@@ -8,7 +8,7 @@
   'use strict';
 
   const M = (window.__MSA = window.__MSA || {});
-  M.SURUM = '6.3';
+  M.SURUM = '6.4';
   M.GELISTIRICI = 'Sercan ÖZDEMİR';
 
   // ---------------------------------------------------------------------------
@@ -196,6 +196,12 @@
   M.satirTarihi = (tr) => (tr ? M.hucre(tr, 5) : '');
   M.manuelMi = (tr) => M.girisMetni(tr).includes('Manuel') || M.cikisMetni(tr).includes('Manuel');
   M.ciftManuelMi = (tr) => M.girisMetni(tr).includes('Manuel') && M.cikisMetni(tr).includes('Manuel');
+
+  /** "K(*)" (KGS) işareti: hem ana listede (K(*):7(%88)) hem seans tablosunda 14/15. sütunda çıkar. */
+  M.KGS_RE = /K(?:GS)?\s*\(\s*\*\s*\)/i;
+  M.kgsMi = (tr) => M.KGS_RE.test(M.hucre(tr, 14)) || M.KGS_RE.test(M.hucre(tr, 15));
+  /** Giriş/çıkış hücresini tek harfe indirger: K(*) → K, Manuel → M, diğer → O */
+  M.taraf = (metin) => (M.KGS_RE.test(metin) ? 'K' : metin.includes('Manuel') ? 'M' : 'O');
 
   /** Denetim (18. sütun) metnini yorumlar. */
   M.denetimDurumu = (metin) => {

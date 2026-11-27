@@ -19,6 +19,7 @@
     EN_AZ_BIR: 'En Az Biri Otomatik (O-O, O-M, M-O)',
     MANUELSE_SIL: 'En Az Biri Manuelse SİL (M-M, O-M, M-O)',
     HEPSI: 'Tümünü Onayla (M-M Dahil)',
+    KGS: 'KGS(*) Uyarılı Seansları Onayla',
   };
 
   const varsayilan = () => ({
@@ -63,6 +64,7 @@
       case 'EN_AZ_BIR': if (gOto || cOto) islem = 'ONAYLA'; break;
       case 'MANUELSE_SIL': if (manuelVar && M.denetlenmisMi(tr)) islem = 'SIL'; break;
       case 'HEPSI': islem = 'ONAYLA'; break;
+      case 'KGS': if (M.kgsMi(tr) && !M.denetimDurumu(M.denetimMetni(tr)).uyumlu) islem = 'ONAYLA'; break;
     }
     return islem;
   }
