@@ -114,8 +114,19 @@ async function lisansDurumu() {
   };
 }
 
+/**
+ * Çağrıları sıraya alır: onInstalled + açılış çağrısı aynı anda çalışınca
+ * ikisi de "kayıt yok" görüp aynı kimliği iki kez kaydediyordu (Duplicate script ID).
+ */
+let kuyruk = Promise.resolve();
+function senkronize(zorla = false) {
+  const p = kuyruk.then(() => senkronizeIc(zorla));
+  kuyruk = p.catch(() => {});
+  return p;
+}
+
 /** Lisans geçerliyse içerik betiklerini kaydeder, değilse kaldırır. */
-async function senkronize(zorla = false) {
+async function senkronizeIc(zorla = false) {
   const durum = await lisansDurumu();
   try {
     const var_ = (await chrome.scripting.getRegisteredContentScripts({ ids: [KAYIT_ID] })).length > 0;

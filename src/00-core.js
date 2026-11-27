@@ -8,7 +8,7 @@
   'use strict';
 
   const M = (window.__MSA = window.__MSA || {});
-  M.SURUM = '6.4';
+  M.SURUM = '6.4.1';
   M.GELISTIRICI = 'Sercan ÖZDEMİR';
 
   // ---------------------------------------------------------------------------

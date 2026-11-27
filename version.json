@@ -1,5 +1,5 @@
 {
-  "surum": "6.4",
+  "surum": "6.4.1",
   "tarih": "2026-11-27",
-  "not": "Yeni: K(*) KGS raporu (tarih/saat), Turbo'da KGS otomatik onay modu, Manuel Gezgin'de KGS modu."
+  "not": "Düzeltme: uzantı yüklenirken çıkan 'İçerik betiği kaydı hatası' (çift kayıt) giderildi."
 }
